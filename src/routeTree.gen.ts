@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as QueueRouteImport } from './routes/queue'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReceptionistWalkinRouteImport } from './routes/receptionist.walkin'
+import { Route as ReceptionistSearchRouteImport } from './routes/receptionist.search'
 import { Route as ReceptionistDashboardRouteImport } from './routes/receptionist.dashboard'
 import { Route as PatientQueueRouteImport } from './routes/patient.queue'
 import { Route as PatientProfileRouteImport } from './routes/patient.profile'
@@ -33,6 +34,11 @@ const IndexRoute = IndexRouteImport.update({
 const ReceptionistWalkinRoute = ReceptionistWalkinRouteImport.update({
   id: '/receptionist/walkin',
   path: '/receptionist/walkin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReceptionistSearchRoute = ReceptionistSearchRouteImport.update({
+  id: '/receptionist/search',
+  path: '/receptionist/search',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReceptionistDashboardRoute = ReceptionistDashboardRouteImport.update({
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/patient/profile': typeof PatientProfileRoute
   '/patient/queue': typeof PatientQueueRoute
   '/receptionist/dashboard': typeof ReceptionistDashboardRoute
+  '/receptionist/search': typeof ReceptionistSearchRoute
   '/receptionist/walkin': typeof ReceptionistWalkinRoute
 }
 export interface FileRoutesByTo {
@@ -93,6 +100,7 @@ export interface FileRoutesByTo {
   '/patient/profile': typeof PatientProfileRoute
   '/patient/queue': typeof PatientQueueRoute
   '/receptionist/dashboard': typeof ReceptionistDashboardRoute
+  '/receptionist/search': typeof ReceptionistSearchRoute
   '/receptionist/walkin': typeof ReceptionistWalkinRoute
 }
 export interface FileRoutesById {
@@ -106,6 +114,7 @@ export interface FileRoutesById {
   '/patient/profile': typeof PatientProfileRoute
   '/patient/queue': typeof PatientQueueRoute
   '/receptionist/dashboard': typeof ReceptionistDashboardRoute
+  '/receptionist/search': typeof ReceptionistSearchRoute
   '/receptionist/walkin': typeof ReceptionistWalkinRoute
 }
 export interface FileRouteTypes {
@@ -120,6 +129,7 @@ export interface FileRouteTypes {
     | '/patient/profile'
     | '/patient/queue'
     | '/receptionist/dashboard'
+    | '/receptionist/search'
     | '/receptionist/walkin'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -132,6 +142,7 @@ export interface FileRouteTypes {
     | '/patient/profile'
     | '/patient/queue'
     | '/receptionist/dashboard'
+    | '/receptionist/search'
     | '/receptionist/walkin'
   id:
     | '__root__'
@@ -144,6 +155,7 @@ export interface FileRouteTypes {
     | '/patient/profile'
     | '/patient/queue'
     | '/receptionist/dashboard'
+    | '/receptionist/search'
     | '/receptionist/walkin'
   fileRoutesById: FileRoutesById
 }
@@ -157,6 +169,7 @@ export interface RootRouteChildren {
   PatientProfileRoute: typeof PatientProfileRoute
   PatientQueueRoute: typeof PatientQueueRoute
   ReceptionistDashboardRoute: typeof ReceptionistDashboardRoute
+  ReceptionistSearchRoute: typeof ReceptionistSearchRoute
   ReceptionistWalkinRoute: typeof ReceptionistWalkinRoute
 }
 
@@ -181,6 +194,13 @@ declare module '@tanstack/react-router' {
       path: '/receptionist/walkin'
       fullPath: '/receptionist/walkin'
       preLoaderRoute: typeof ReceptionistWalkinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/receptionist/search': {
+      id: '/receptionist/search'
+      path: '/receptionist/search'
+      fullPath: '/receptionist/search'
+      preLoaderRoute: typeof ReceptionistSearchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/receptionist/dashboard': {
@@ -245,6 +265,7 @@ const rootRouteChildren: RootRouteChildren = {
   PatientProfileRoute: PatientProfileRoute,
   PatientQueueRoute: PatientQueueRoute,
   ReceptionistDashboardRoute: ReceptionistDashboardRoute,
+  ReceptionistSearchRoute: ReceptionistSearchRoute,
   ReceptionistWalkinRoute: ReceptionistWalkinRoute,
 }
 export const routeTree = rootRouteImport
