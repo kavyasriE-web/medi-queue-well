@@ -72,7 +72,8 @@ function Page() {
     const { data, error } = await supabase.from("appointments").insert({
       patient_id: user.id, doctor_id: doctorId, department_id: departmentId,
       appointment_date: date, slot_time: slot, symptoms,
-    }).select("*, departments(name, code)").single();
+      token_number: 0, token_code: "",
+    } as any).select("*, departments(name, code)").single();
     if (error) { toast.error(error.message); setBusy(false); return; }
     setConfirmed(data); setBusy(false); toast.success("Appointment booked!");
   };
