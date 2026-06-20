@@ -19,6 +19,7 @@ import { Route as PatientProfileRouteImport } from './routes/patient.profile'
 import { Route as PatientDashboardRouteImport } from './routes/patient.dashboard'
 import { Route as PatientBookRouteImport } from './routes/patient.book'
 import { Route as PatientAppointmentsRouteImport } from './routes/patient.appointments'
+import { Route as DoctorQueueRouteImport } from './routes/doctor.queue'
 import { Route as DoctorDashboardRouteImport } from './routes/doctor.dashboard'
 import { Route as AuthRoleRouteImport } from './routes/auth.$role'
 
@@ -72,6 +73,11 @@ const PatientAppointmentsRoute = PatientAppointmentsRouteImport.update({
   path: '/patient/appointments',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DoctorQueueRoute = DoctorQueueRouteImport.update({
+  id: '/doctor/queue',
+  path: '/doctor/queue',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DoctorDashboardRoute = DoctorDashboardRouteImport.update({
   id: '/doctor/dashboard',
   path: '/doctor/dashboard',
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/queue': typeof QueueRoute
   '/auth/$role': typeof AuthRoleRoute
   '/doctor/dashboard': typeof DoctorDashboardRoute
+  '/doctor/queue': typeof DoctorQueueRoute
   '/patient/appointments': typeof PatientAppointmentsRoute
   '/patient/book': typeof PatientBookRoute
   '/patient/dashboard': typeof PatientDashboardRoute
@@ -102,6 +109,7 @@ export interface FileRoutesByTo {
   '/queue': typeof QueueRoute
   '/auth/$role': typeof AuthRoleRoute
   '/doctor/dashboard': typeof DoctorDashboardRoute
+  '/doctor/queue': typeof DoctorQueueRoute
   '/patient/appointments': typeof PatientAppointmentsRoute
   '/patient/book': typeof PatientBookRoute
   '/patient/dashboard': typeof PatientDashboardRoute
@@ -117,6 +125,7 @@ export interface FileRoutesById {
   '/queue': typeof QueueRoute
   '/auth/$role': typeof AuthRoleRoute
   '/doctor/dashboard': typeof DoctorDashboardRoute
+  '/doctor/queue': typeof DoctorQueueRoute
   '/patient/appointments': typeof PatientAppointmentsRoute
   '/patient/book': typeof PatientBookRoute
   '/patient/dashboard': typeof PatientDashboardRoute
@@ -133,6 +142,7 @@ export interface FileRouteTypes {
     | '/queue'
     | '/auth/$role'
     | '/doctor/dashboard'
+    | '/doctor/queue'
     | '/patient/appointments'
     | '/patient/book'
     | '/patient/dashboard'
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/queue'
     | '/auth/$role'
     | '/doctor/dashboard'
+    | '/doctor/queue'
     | '/patient/appointments'
     | '/patient/book'
     | '/patient/dashboard'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/queue'
     | '/auth/$role'
     | '/doctor/dashboard'
+    | '/doctor/queue'
     | '/patient/appointments'
     | '/patient/book'
     | '/patient/dashboard'
@@ -176,6 +188,7 @@ export interface RootRouteChildren {
   QueueRoute: typeof QueueRoute
   AuthRoleRoute: typeof AuthRoleRoute
   DoctorDashboardRoute: typeof DoctorDashboardRoute
+  DoctorQueueRoute: typeof DoctorQueueRoute
   PatientAppointmentsRoute: typeof PatientAppointmentsRoute
   PatientBookRoute: typeof PatientBookRoute
   PatientDashboardRoute: typeof PatientDashboardRoute
@@ -258,6 +271,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PatientAppointmentsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/doctor/queue': {
+      id: '/doctor/queue'
+      path: '/doctor/queue'
+      fullPath: '/doctor/queue'
+      preLoaderRoute: typeof DoctorQueueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/doctor/dashboard': {
       id: '/doctor/dashboard'
       path: '/doctor/dashboard'
@@ -280,6 +300,7 @@ const rootRouteChildren: RootRouteChildren = {
   QueueRoute: QueueRoute,
   AuthRoleRoute: AuthRoleRoute,
   DoctorDashboardRoute: DoctorDashboardRoute,
+  DoctorQueueRoute: DoctorQueueRoute,
   PatientAppointmentsRoute: PatientAppointmentsRoute,
   PatientBookRoute: PatientBookRoute,
   PatientDashboardRoute: PatientDashboardRoute,
