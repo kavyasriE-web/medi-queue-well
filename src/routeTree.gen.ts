@@ -9,38 +9,218 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as QueueRouteImport } from './routes/queue'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ReceptionistWalkinRouteImport } from './routes/receptionist.walkin'
+import { Route as ReceptionistSearchRouteImport } from './routes/receptionist.search'
+import { Route as ReceptionistDashboardRouteImport } from './routes/receptionist.dashboard'
+import { Route as PatientQueueRouteImport } from './routes/patient.queue'
+import { Route as PatientProfileRouteImport } from './routes/patient.profile'
+import { Route as PatientDashboardRouteImport } from './routes/patient.dashboard'
+import { Route as PatientBookRouteImport } from './routes/patient.book'
+import { Route as PatientAppointmentsRouteImport } from './routes/patient.appointments'
+import { Route as DoctorQueueRouteImport } from './routes/doctor.queue'
+import { Route as DoctorDashboardRouteImport } from './routes/doctor.dashboard'
+import { Route as DoctorAvailabilityRouteImport } from './routes/doctor.availability'
+import { Route as AuthRoleRouteImport } from './routes/auth.$role'
 
+const QueueRoute = QueueRouteImport.update({
+  id: '/queue',
+  path: '/queue',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReceptionistWalkinRoute = ReceptionistWalkinRouteImport.update({
+  id: '/receptionist/walkin',
+  path: '/receptionist/walkin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReceptionistSearchRoute = ReceptionistSearchRouteImport.update({
+  id: '/receptionist/search',
+  path: '/receptionist/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReceptionistDashboardRoute = ReceptionistDashboardRouteImport.update({
+  id: '/receptionist/dashboard',
+  path: '/receptionist/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PatientQueueRoute = PatientQueueRouteImport.update({
+  id: '/patient/queue',
+  path: '/patient/queue',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PatientProfileRoute = PatientProfileRouteImport.update({
+  id: '/patient/profile',
+  path: '/patient/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PatientDashboardRoute = PatientDashboardRouteImport.update({
+  id: '/patient/dashboard',
+  path: '/patient/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PatientBookRoute = PatientBookRouteImport.update({
+  id: '/patient/book',
+  path: '/patient/book',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PatientAppointmentsRoute = PatientAppointmentsRouteImport.update({
+  id: '/patient/appointments',
+  path: '/patient/appointments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DoctorQueueRoute = DoctorQueueRouteImport.update({
+  id: '/doctor/queue',
+  path: '/doctor/queue',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DoctorDashboardRoute = DoctorDashboardRouteImport.update({
+  id: '/doctor/dashboard',
+  path: '/doctor/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DoctorAvailabilityRoute = DoctorAvailabilityRouteImport.update({
+  id: '/doctor/availability',
+  path: '/doctor/availability',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoleRoute = AuthRoleRouteImport.update({
+  id: '/auth/$role',
+  path: '/auth/$role',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/queue': typeof QueueRoute
+  '/auth/$role': typeof AuthRoleRoute
+  '/doctor/availability': typeof DoctorAvailabilityRoute
+  '/doctor/dashboard': typeof DoctorDashboardRoute
+  '/doctor/queue': typeof DoctorQueueRoute
+  '/patient/appointments': typeof PatientAppointmentsRoute
+  '/patient/book': typeof PatientBookRoute
+  '/patient/dashboard': typeof PatientDashboardRoute
+  '/patient/profile': typeof PatientProfileRoute
+  '/patient/queue': typeof PatientQueueRoute
+  '/receptionist/dashboard': typeof ReceptionistDashboardRoute
+  '/receptionist/search': typeof ReceptionistSearchRoute
+  '/receptionist/walkin': typeof ReceptionistWalkinRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/queue': typeof QueueRoute
+  '/auth/$role': typeof AuthRoleRoute
+  '/doctor/availability': typeof DoctorAvailabilityRoute
+  '/doctor/dashboard': typeof DoctorDashboardRoute
+  '/doctor/queue': typeof DoctorQueueRoute
+  '/patient/appointments': typeof PatientAppointmentsRoute
+  '/patient/book': typeof PatientBookRoute
+  '/patient/dashboard': typeof PatientDashboardRoute
+  '/patient/profile': typeof PatientProfileRoute
+  '/patient/queue': typeof PatientQueueRoute
+  '/receptionist/dashboard': typeof ReceptionistDashboardRoute
+  '/receptionist/search': typeof ReceptionistSearchRoute
+  '/receptionist/walkin': typeof ReceptionistWalkinRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/queue': typeof QueueRoute
+  '/auth/$role': typeof AuthRoleRoute
+  '/doctor/availability': typeof DoctorAvailabilityRoute
+  '/doctor/dashboard': typeof DoctorDashboardRoute
+  '/doctor/queue': typeof DoctorQueueRoute
+  '/patient/appointments': typeof PatientAppointmentsRoute
+  '/patient/book': typeof PatientBookRoute
+  '/patient/dashboard': typeof PatientDashboardRoute
+  '/patient/profile': typeof PatientProfileRoute
+  '/patient/queue': typeof PatientQueueRoute
+  '/receptionist/dashboard': typeof ReceptionistDashboardRoute
+  '/receptionist/search': typeof ReceptionistSearchRoute
+  '/receptionist/walkin': typeof ReceptionistWalkinRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/queue'
+    | '/auth/$role'
+    | '/doctor/availability'
+    | '/doctor/dashboard'
+    | '/doctor/queue'
+    | '/patient/appointments'
+    | '/patient/book'
+    | '/patient/dashboard'
+    | '/patient/profile'
+    | '/patient/queue'
+    | '/receptionist/dashboard'
+    | '/receptionist/search'
+    | '/receptionist/walkin'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/queue'
+    | '/auth/$role'
+    | '/doctor/availability'
+    | '/doctor/dashboard'
+    | '/doctor/queue'
+    | '/patient/appointments'
+    | '/patient/book'
+    | '/patient/dashboard'
+    | '/patient/profile'
+    | '/patient/queue'
+    | '/receptionist/dashboard'
+    | '/receptionist/search'
+    | '/receptionist/walkin'
+  id:
+    | '__root__'
+    | '/'
+    | '/queue'
+    | '/auth/$role'
+    | '/doctor/availability'
+    | '/doctor/dashboard'
+    | '/doctor/queue'
+    | '/patient/appointments'
+    | '/patient/book'
+    | '/patient/dashboard'
+    | '/patient/profile'
+    | '/patient/queue'
+    | '/receptionist/dashboard'
+    | '/receptionist/search'
+    | '/receptionist/walkin'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  QueueRoute: typeof QueueRoute
+  AuthRoleRoute: typeof AuthRoleRoute
+  DoctorAvailabilityRoute: typeof DoctorAvailabilityRoute
+  DoctorDashboardRoute: typeof DoctorDashboardRoute
+  DoctorQueueRoute: typeof DoctorQueueRoute
+  PatientAppointmentsRoute: typeof PatientAppointmentsRoute
+  PatientBookRoute: typeof PatientBookRoute
+  PatientDashboardRoute: typeof PatientDashboardRoute
+  PatientProfileRoute: typeof PatientProfileRoute
+  PatientQueueRoute: typeof PatientQueueRoute
+  ReceptionistDashboardRoute: typeof ReceptionistDashboardRoute
+  ReceptionistSearchRoute: typeof ReceptionistSearchRoute
+  ReceptionistWalkinRoute: typeof ReceptionistWalkinRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/queue': {
+      id: '/queue'
+      path: '/queue'
+      fullPath: '/queue'
+      preLoaderRoute: typeof QueueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +228,109 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/receptionist/walkin': {
+      id: '/receptionist/walkin'
+      path: '/receptionist/walkin'
+      fullPath: '/receptionist/walkin'
+      preLoaderRoute: typeof ReceptionistWalkinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/receptionist/search': {
+      id: '/receptionist/search'
+      path: '/receptionist/search'
+      fullPath: '/receptionist/search'
+      preLoaderRoute: typeof ReceptionistSearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/receptionist/dashboard': {
+      id: '/receptionist/dashboard'
+      path: '/receptionist/dashboard'
+      fullPath: '/receptionist/dashboard'
+      preLoaderRoute: typeof ReceptionistDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/patient/queue': {
+      id: '/patient/queue'
+      path: '/patient/queue'
+      fullPath: '/patient/queue'
+      preLoaderRoute: typeof PatientQueueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/patient/profile': {
+      id: '/patient/profile'
+      path: '/patient/profile'
+      fullPath: '/patient/profile'
+      preLoaderRoute: typeof PatientProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/patient/dashboard': {
+      id: '/patient/dashboard'
+      path: '/patient/dashboard'
+      fullPath: '/patient/dashboard'
+      preLoaderRoute: typeof PatientDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/patient/book': {
+      id: '/patient/book'
+      path: '/patient/book'
+      fullPath: '/patient/book'
+      preLoaderRoute: typeof PatientBookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/patient/appointments': {
+      id: '/patient/appointments'
+      path: '/patient/appointments'
+      fullPath: '/patient/appointments'
+      preLoaderRoute: typeof PatientAppointmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/doctor/queue': {
+      id: '/doctor/queue'
+      path: '/doctor/queue'
+      fullPath: '/doctor/queue'
+      preLoaderRoute: typeof DoctorQueueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/doctor/dashboard': {
+      id: '/doctor/dashboard'
+      path: '/doctor/dashboard'
+      fullPath: '/doctor/dashboard'
+      preLoaderRoute: typeof DoctorDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/doctor/availability': {
+      id: '/doctor/availability'
+      path: '/doctor/availability'
+      fullPath: '/doctor/availability'
+      preLoaderRoute: typeof DoctorAvailabilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/$role': {
+      id: '/auth/$role'
+      path: '/auth/$role'
+      fullPath: '/auth/$role'
+      preLoaderRoute: typeof AuthRoleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  QueueRoute: QueueRoute,
+  AuthRoleRoute: AuthRoleRoute,
+  DoctorAvailabilityRoute: DoctorAvailabilityRoute,
+  DoctorDashboardRoute: DoctorDashboardRoute,
+  DoctorQueueRoute: DoctorQueueRoute,
+  PatientAppointmentsRoute: PatientAppointmentsRoute,
+  PatientBookRoute: PatientBookRoute,
+  PatientDashboardRoute: PatientDashboardRoute,
+  PatientProfileRoute: PatientProfileRoute,
+  PatientQueueRoute: PatientQueueRoute,
+  ReceptionistDashboardRoute: ReceptionistDashboardRoute,
+  ReceptionistSearchRoute: ReceptionistSearchRoute,
+  ReceptionistWalkinRoute: ReceptionistWalkinRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
