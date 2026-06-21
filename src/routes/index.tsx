@@ -79,10 +79,10 @@ function Home() {
           <Badge variant="secondary" className="mb-4 bg-white/15 text-primary-foreground border-white/20">
             <ShieldCheck className="mr-1 h-3 w-3" /> Trusted by 10,000+ patients
           </Badge>
-          <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
+          <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-tight text-primary-foreground sm:text-6xl">
             Skip the wait. <span className="opacity-80">Arrive when it's your turn.</span>
           </h1>
-          <p className="mt-4 max-w-2xl text-lg opacity-90">
+          <p className="mt-4 max-w-2xl text-lg text-primary-foreground opacity-90">
             Book hospital appointments online, get an instant token, and track the live queue in real time.
             MediQueue helps you spend less time in the waiting room and more time on what matters.
           </p>

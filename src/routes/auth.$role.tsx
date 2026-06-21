@@ -99,8 +99,8 @@ function AuthPage() {
           <span className="text-lg font-bold">MediQueue</span>
         </Link>
         <div>
-          <h2 className="text-4xl font-bold leading-tight">{Meta.title}</h2>
-          <p className="mt-2 max-w-md text-lg opacity-90">{Meta.desc}</p>
+          <h2 className="text-4xl font-bold leading-tight text-primary-foreground">{Meta.title}</h2>
+          <p className="mt-2 max-w-md text-lg text-primary-foreground opacity-90">{Meta.desc}</p>
         </div>
         <p className="text-sm opacity-70">© {new Date().getFullYear()} MediQueue Hospital</p>
       </div>
