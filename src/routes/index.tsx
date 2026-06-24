@@ -204,7 +204,7 @@ function Home() {
               { role: "receptionist" as const, icon: Hospital, title: "Receptionist Login", desc: "Manage today's appointments" },
               { role: "doctor" as const, icon: Stethoscope, title: "Doctor Login", desc: "Run your daily queue" },
             ].map((p) => (
-              <Link key={p.role} to="/auth/$role" params={{ role: p.role }} className="group rounded-xl border border-border bg-card p-6 transition hover:border-primary hover:shadow-md">
+              <Link key={p.role} to="/auth/$role" params={{ role: p.role }} className="group rounded-xl border border-border bg-card p-6 transition hover:border-primary">
                 <div className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10 text-primary"><p.icon className="h-5 w-5" /></div>
                 <h3 className="mt-3 font-semibold group-hover:text-primary">{p.title}</h3>
                 <p className="text-sm text-muted-foreground">{p.desc}</p>
