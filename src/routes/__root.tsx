@@ -81,11 +81,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "MediQueue – Smart Hospital Appointment & Queue Management" },
       { name: "description", content: "Book hospital appointments online, get instant tokens, and track the live queue in real time." },
-      { property: "og:title", content: "MediQueue – Smart Hospital Queue Management" },
-      { property: "og:description", content: "Reduce waiting time. Book online, receive a token, and arrive when it's your turn." },
+      { property: "og:title", content: "MediQueue – Smart Hospital Appointment & Queue Management" },
+      { property: "og:description", content: "Book hospital appointments online, get instant tokens, and track the live queue in real time." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "MediQueue – Smart Hospital Appointment & Queue Management" },
+      { name: "twitter:description", content: "Book hospital appointments online, get instant tokens, and track the live queue in real time." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/0f2254f5-3f7f-4e64-a124-22da90f0237e" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/0f2254f5-3f7f-4e64-a124-22da90f0237e" },
     ],
     links: [
       {
