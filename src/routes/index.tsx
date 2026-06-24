@@ -174,7 +174,7 @@ function Home() {
 
       {/* Live preview */}
       <section className="mx-auto max-w-6xl px-4 py-16">
-        <div className="rounded-2xl border border-border bg-card p-8 shadow-sm">
+        <div className="rounded-2xl border border-border bg-card p-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <h2 className="text-2xl font-bold">Live queue, right now</h2>
