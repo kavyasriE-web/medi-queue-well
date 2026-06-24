@@ -117,7 +117,7 @@ function Home() {
             { icon: Activity, title: "Live updates", desc: "Watch the queue advance in real time so you know exactly when to arrive." },
             { icon: Stethoscope, title: "Doctor-friendly", desc: "Doctors call, skip, or complete with a click. Patients see status update instantly." },
           ].map((f) => (
-            <div key={f.title} className="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <div key={f.title} className="rounded-xl border border-border bg-card p-6">
               <div className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10 text-primary"><f.icon className="h-5 w-5" /></div>
               <h3 className="mt-3 text-lg font-semibold">{f.title}</h3>
               <p className="mt-1 text-sm text-muted-foreground">{f.desc}</p>
