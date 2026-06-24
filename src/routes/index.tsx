@@ -117,7 +117,7 @@ function Home() {
             { icon: Activity, title: "Live updates", desc: "Watch the queue advance in real time so you know exactly when to arrive." },
             { icon: Stethoscope, title: "Doctor-friendly", desc: "Doctors call, skip, or complete with a click. Patients see status update instantly." },
           ].map((f) => (
-            <div key={f.title} className="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <div key={f.title} className="rounded-xl border border-border bg-card p-6">
               <div className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10 text-primary"><f.icon className="h-5 w-5" /></div>
               <h3 className="mt-3 text-lg font-semibold">{f.title}</h3>
               <p className="mt-1 text-sm text-muted-foreground">{f.desc}</p>
@@ -138,7 +138,7 @@ function Home() {
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {departments.map((d) => (
-              <Card key={d.id} className="group transition hover:-translate-y-0.5 hover:shadow-md">
+              <Card key={d.id} className="group transition hover:-translate-y-0.5">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <Badge variant="outline" className="font-mono">{d.code}</Badge>
@@ -174,7 +174,7 @@ function Home() {
 
       {/* Live preview */}
       <section className="mx-auto max-w-6xl px-4 py-16">
-        <div className="rounded-2xl border border-border bg-card p-8 shadow-sm">
+        <div className="rounded-2xl border border-border bg-card p-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <h2 className="text-2xl font-bold">Live queue, right now</h2>
@@ -204,7 +204,7 @@ function Home() {
               { role: "receptionist" as const, icon: Hospital, title: "Receptionist Login", desc: "Manage today's appointments" },
               { role: "doctor" as const, icon: Stethoscope, title: "Doctor Login", desc: "Run your daily queue" },
             ].map((p) => (
-              <Link key={p.role} to="/auth/$role" params={{ role: p.role }} className="group rounded-xl border border-border bg-card p-6 transition hover:border-primary hover:shadow-md">
+              <Link key={p.role} to="/auth/$role" params={{ role: p.role }} className="group rounded-xl border border-border bg-card p-6 transition hover:border-primary">
                 <div className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10 text-primary"><p.icon className="h-5 w-5" /></div>
                 <h3 className="mt-3 font-semibold group-hover:text-primary">{p.title}</h3>
                 <p className="text-sm text-muted-foreground">{p.desc}</p>
