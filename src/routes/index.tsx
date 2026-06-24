@@ -138,7 +138,7 @@ function Home() {
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {departments.map((d) => (
-              <Card key={d.id} className="group transition hover:-translate-y-0.5 hover:shadow-md">
+              <Card key={d.id} className="group transition hover:-translate-y-0.5">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <Badge variant="outline" className="font-mono">{d.code}</Badge>
