@@ -74,7 +74,6 @@ function Home() {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-10 opacity-90" style={{ background: "var(--gradient-hero)" }} />
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,white_0%,transparent_60%)] opacity-20" />
         <div className="mx-auto max-w-6xl px-4 py-20 text-primary-foreground sm:py-28">
           <Badge variant="secondary" className="mb-4 bg-white/15 text-primary-foreground border-white/20">
             <ShieldCheck className="mr-1 h-3 w-3" /> Trusted by 10,000+ patients
