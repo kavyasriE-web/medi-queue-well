@@ -21,6 +21,7 @@ const navByRole: Record<Role, NavItem[]> = {
   receptionist: [
     { to: "/receptionist/dashboard", label: "Dashboard", icon: Home },
     { to: "/receptionist/walkin", label: "Walk-in Patient", icon: UserPlus },
+    { to: "/receptionist/doctors", label: "Doctors", icon: Stethoscope },
     { to: "/receptionist/search", label: "Search Appointments", icon: Search },
   ],
   doctor: [

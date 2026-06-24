@@ -13,6 +13,7 @@ import { Route as QueueRouteImport } from './routes/queue'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReceptionistWalkinRouteImport } from './routes/receptionist.walkin'
 import { Route as ReceptionistSearchRouteImport } from './routes/receptionist.search'
+import { Route as ReceptionistDoctorsRouteImport } from './routes/receptionist.doctors'
 import { Route as ReceptionistDashboardRouteImport } from './routes/receptionist.dashboard'
 import { Route as PatientQueueRouteImport } from './routes/patient.queue'
 import { Route as PatientProfileRouteImport } from './routes/patient.profile'
@@ -42,6 +43,11 @@ const ReceptionistWalkinRoute = ReceptionistWalkinRouteImport.update({
 const ReceptionistSearchRoute = ReceptionistSearchRouteImport.update({
   id: '/receptionist/search',
   path: '/receptionist/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReceptionistDoctorsRoute = ReceptionistDoctorsRouteImport.update({
+  id: '/receptionist/doctors',
+  path: '/receptionist/doctors',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReceptionistDashboardRoute = ReceptionistDashboardRouteImport.update({
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/patient/profile': typeof PatientProfileRoute
   '/patient/queue': typeof PatientQueueRoute
   '/receptionist/dashboard': typeof ReceptionistDashboardRoute
+  '/receptionist/doctors': typeof ReceptionistDoctorsRoute
   '/receptionist/search': typeof ReceptionistSearchRoute
   '/receptionist/walkin': typeof ReceptionistWalkinRoute
 }
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/patient/profile': typeof PatientProfileRoute
   '/patient/queue': typeof PatientQueueRoute
   '/receptionist/dashboard': typeof ReceptionistDashboardRoute
+  '/receptionist/doctors': typeof ReceptionistDoctorsRoute
   '/receptionist/search': typeof ReceptionistSearchRoute
   '/receptionist/walkin': typeof ReceptionistWalkinRoute
 }
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   '/patient/profile': typeof PatientProfileRoute
   '/patient/queue': typeof PatientQueueRoute
   '/receptionist/dashboard': typeof ReceptionistDashboardRoute
+  '/receptionist/doctors': typeof ReceptionistDoctorsRoute
   '/receptionist/search': typeof ReceptionistSearchRoute
   '/receptionist/walkin': typeof ReceptionistWalkinRoute
 }
@@ -159,6 +168,7 @@ export interface FileRouteTypes {
     | '/patient/profile'
     | '/patient/queue'
     | '/receptionist/dashboard'
+    | '/receptionist/doctors'
     | '/receptionist/search'
     | '/receptionist/walkin'
   fileRoutesByTo: FileRoutesByTo
@@ -175,6 +185,7 @@ export interface FileRouteTypes {
     | '/patient/profile'
     | '/patient/queue'
     | '/receptionist/dashboard'
+    | '/receptionist/doctors'
     | '/receptionist/search'
     | '/receptionist/walkin'
   id:
@@ -191,6 +202,7 @@ export interface FileRouteTypes {
     | '/patient/profile'
     | '/patient/queue'
     | '/receptionist/dashboard'
+    | '/receptionist/doctors'
     | '/receptionist/search'
     | '/receptionist/walkin'
   fileRoutesById: FileRoutesById
@@ -208,6 +220,7 @@ export interface RootRouteChildren {
   PatientProfileRoute: typeof PatientProfileRoute
   PatientQueueRoute: typeof PatientQueueRoute
   ReceptionistDashboardRoute: typeof ReceptionistDashboardRoute
+  ReceptionistDoctorsRoute: typeof ReceptionistDoctorsRoute
   ReceptionistSearchRoute: typeof ReceptionistSearchRoute
   ReceptionistWalkinRoute: typeof ReceptionistWalkinRoute
 }
@@ -240,6 +253,13 @@ declare module '@tanstack/react-router' {
       path: '/receptionist/search'
       fullPath: '/receptionist/search'
       preLoaderRoute: typeof ReceptionistSearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/receptionist/doctors': {
+      id: '/receptionist/doctors'
+      path: '/receptionist/doctors'
+      fullPath: '/receptionist/doctors'
+      preLoaderRoute: typeof ReceptionistDoctorsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/receptionist/dashboard': {
@@ -328,6 +348,7 @@ const rootRouteChildren: RootRouteChildren = {
   PatientProfileRoute: PatientProfileRoute,
   PatientQueueRoute: PatientQueueRoute,
   ReceptionistDashboardRoute: ReceptionistDashboardRoute,
+  ReceptionistDoctorsRoute: ReceptionistDoctorsRoute,
   ReceptionistSearchRoute: ReceptionistSearchRoute,
   ReceptionistWalkinRoute: ReceptionistWalkinRoute,
 }
