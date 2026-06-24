@@ -74,14 +74,14 @@ function Home() {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-10 opacity-90" style={{ background: "var(--gradient-hero)" }} />
-        <div className="mx-auto max-w-6xl px-4 py-20 text-primary-foreground sm:py-28">
-          <Badge variant="secondary" className="mb-4 bg-white/15 text-primary-foreground border-white/20">
+        <div className="relative z-10 mx-auto max-w-6xl px-4 py-20 text-black sm:py-28">
+          <Badge variant="secondary" className="mb-4 bg-white/70 text-black border-black/10">
             <ShieldCheck className="mr-1 h-3 w-3" /> Trusted by 10,000+ patients
           </Badge>
-          <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-tight text-primary-foreground sm:text-6xl">
-            Skip the wait. <span className="opacity-80">Arrive when it's your turn.</span>
+          <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-tight text-black sm:text-6xl">
+            Skip the wait. <span className="opacity-90">Arrive when it's your turn.</span>
           </h1>
-          <p className="mt-4 max-w-2xl text-lg text-primary-foreground opacity-90">
+          <p className="mt-4 max-w-2xl text-lg text-black opacity-90">
             Book hospital appointments online, get an instant token, and track the live queue in real time.
             MediQueue helps you spend less time in the waiting room and more time on what matters.
           </p>
@@ -89,7 +89,7 @@ function Home() {
             <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90">
               <Link to="/patient/book"><Calendar className="mr-2 h-4 w-4" /> Book Appointment</Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="border-white/30 bg-white/10 text-primary-foreground hover:bg-white/20">
+            <Button asChild size="lg" variant="outline" className="border-black/30 bg-white/60 text-black hover:bg-white/80">
               <Link to="/queue"><Users className="mr-2 h-4 w-4" /> View Live Queue</Link>
             </Button>
           </div>
@@ -100,9 +100,9 @@ function Home() {
               { label: "Daily tokens", value: "300+" },
               { label: "Realtime", value: "Live" },
             ].map((s) => (
-              <div key={s.label}>
-                <div className="text-3xl font-bold">{s.value}</div>
-                <div className="text-sm opacity-80">{s.label}</div>
+              <div key={s.label} className="text-black">
+                <div className="text-3xl font-bold text-black">{s.value}</div>
+                <div className="text-sm text-black opacity-80">{s.label}</div>
               </div>
             ))}
           </div>
