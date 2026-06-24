@@ -274,7 +274,7 @@ function DoctorFormFields({ departments, initial }: { departments: any[]; initia
         <div className="flex flex-wrap gap-2">
           {DAYS.map(([lbl, n]) => (
             <label key={n} className="flex cursor-pointer items-center gap-2 rounded-md border border-border px-3 py-2 text-sm">
-              <Checkbox name={`day_${n}`} defaultChecked={initDays.includes(n as number)} />
+              <input type="checkbox" name={`day_${n}`} defaultChecked={initDays.includes(n as number)} className="h-4 w-4 accent-primary" />
               {lbl}
             </label>
           ))}
