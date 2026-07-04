@@ -20,6 +20,7 @@ export type Database = {
           created_at: string
           department_id: string
           doctor_id: string
+          hospital_id: string
           id: string
           is_walk_in: boolean
           patient_id: string
@@ -35,6 +36,7 @@ export type Database = {
           created_at?: string
           department_id: string
           doctor_id: string
+          hospital_id: string
           id?: string
           is_walk_in?: boolean
           patient_id: string
@@ -50,6 +52,7 @@ export type Database = {
           created_at?: string
           department_id?: string
           doctor_id?: string
+          hospital_id?: string
           id?: string
           is_walk_in?: boolean
           patient_id?: string
@@ -76,6 +79,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "appointments_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "appointments_patient_id_fkey"
             columns: ["patient_id"]
             isOneToOne: false
@@ -90,6 +100,7 @@ export type Database = {
           code: string
           created_at: string
           description: string | null
+          hospital_id: string
           id: string
           name: string
         }
@@ -98,6 +109,7 @@ export type Database = {
           code: string
           created_at?: string
           description?: string | null
+          hospital_id: string
           id?: string
           name: string
         }
@@ -106,16 +118,26 @@ export type Database = {
           code?: string
           created_at?: string
           description?: string | null
+          hospital_id?: string
           id?: string
           name?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "departments_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       doctors: {
         Row: {
           created_at: string
           department_id: string
           end_time: string
+          hospital_id: string
           id: string
           max_patients_per_day: number
           profile_id: string
@@ -128,6 +150,7 @@ export type Database = {
           created_at?: string
           department_id: string
           end_time?: string
+          hospital_id: string
           id?: string
           max_patients_per_day?: number
           profile_id: string
@@ -140,6 +163,7 @@ export type Database = {
           created_at?: string
           department_id?: string
           end_time?: string
+          hospital_id?: string
           id?: string
           max_patients_per_day?: number
           profile_id?: string
@@ -157,6 +181,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "doctors_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "doctors_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: true
@@ -164,6 +195,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      hospitals: {
+        Row: {
+          address: string | null
+          area: string | null
+          city: string
+          code: string
+          created_at: string
+          description: string | null
+          id: string
+          latitude: number | null
+          longitude: number | null
+          name: string
+          phone: string | null
+        }
+        Insert: {
+          address?: string | null
+          area?: string | null
+          city: string
+          code: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          phone?: string | null
+        }
+        Update: {
+          address?: string | null
+          area?: string | null
+          city?: string
+          code?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          phone?: string | null
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -195,29 +268,41 @@ export type Database = {
       user_roles: {
         Row: {
           created_at: string
+          hospital_id: string | null
           id: string
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Insert: {
           created_at?: string
+          hospital_id?: string | null
           id?: string
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Update: {
           created_at?: string
+          hospital_id?: string | null
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      get_user_hospital: { Args: { _user_id: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
