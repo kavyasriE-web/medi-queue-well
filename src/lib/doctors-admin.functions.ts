@@ -2,15 +2,17 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-async function assertReceptionist(supabase: any, userId: string) {
+async function getReceptionistHospital(supabase: any, userId: string): Promise<string> {
   const { data, error } = await supabase
     .from("user_roles")
-    .select("role")
+    .select("role, hospital_id")
     .eq("user_id", userId)
     .eq("role", "receptionist")
     .maybeSingle();
   if (error) throw new Error(error.message);
   if (!data) throw new Error("Forbidden: receptionist role required");
+  if (!data.hospital_id) throw new Error("Receptionist has no assigned hospital");
+  return data.hospital_id as string;
 }
 
 const createSchema = z.object({
@@ -31,7 +33,7 @@ export const createDoctor = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => createSchema.parse(data))
   .handler(async ({ data, context }) => {
-    await assertReceptionist(context.supabase, context.userId);
+    const hospital_id = await getReceptionistHospital(context.supabase, context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     const norm = (t: string) => (t.length === 5 ? `${t}:00` : t);
@@ -40,7 +42,7 @@ export const createDoctor = createServerFn({ method: "POST" })
       email: data.email,
       password: data.password,
       email_confirm: true,
-      user_metadata: { full_name: data.full_name, phone: data.phone, role: "doctor" },
+      user_metadata: { full_name: data.full_name, phone: data.phone, role: "doctor", hospital_id },
     });
     if (createErr || !created.user) throw new Error(createErr?.message ?? "Failed to create user");
     const uid = created.user.id;
@@ -56,7 +58,7 @@ export const createDoctor = createServerFn({ method: "POST" })
 
     const { error: rErr } = await supabaseAdmin
       .from("user_roles")
-      .upsert({ user_id: uid, role: "doctor" }, { onConflict: "user_id,role" });
+      .upsert({ user_id: uid, role: "doctor", hospital_id }, { onConflict: "user_id,role" });
     if (rErr) {
       await supabaseAdmin.auth.admin.deleteUser(uid);
       throw new Error(rErr.message);
@@ -66,6 +68,7 @@ export const createDoctor = createServerFn({ method: "POST" })
       .from("doctors")
       .insert({
         profile_id: uid,
+        hospital_id,
         department_id: data.department_id,
         specialization: data.specialization || null,
         start_time: norm(data.start_time),
@@ -100,7 +103,7 @@ export const updateDoctor = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => updateSchema.parse(data))
   .handler(async ({ data, context }) => {
-    await assertReceptionist(context.supabase, context.userId);
+    await getReceptionistHospital(context.supabase, context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const norm = (t: string) => (t.length === 5 ? `${t}:00` : t);
 
@@ -131,7 +134,7 @@ export const deleteDoctor = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => z.object({ doctor_id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
-    await assertReceptionist(context.supabase, context.userId);
+    await getReceptionistHospital(context.supabase, context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: doc, error: gErr } = await supabaseAdmin
       .from("doctors").select("profile_id").eq("id", data.doctor_id).single();
