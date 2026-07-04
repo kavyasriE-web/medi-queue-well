@@ -17,6 +17,7 @@ import { Route as ReceptionistDoctorsRouteImport } from './routes/receptionist.d
 import { Route as ReceptionistDashboardRouteImport } from './routes/receptionist.dashboard'
 import { Route as PatientQueueRouteImport } from './routes/patient.queue'
 import { Route as PatientProfileRouteImport } from './routes/patient.profile'
+import { Route as PatientHospitalsRouteImport } from './routes/patient.hospitals'
 import { Route as PatientDashboardRouteImport } from './routes/patient.dashboard'
 import { Route as PatientBookRouteImport } from './routes/patient.book'
 import { Route as PatientAppointmentsRouteImport } from './routes/patient.appointments'
@@ -65,6 +66,11 @@ const PatientProfileRoute = PatientProfileRouteImport.update({
   path: '/patient/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PatientHospitalsRoute = PatientHospitalsRouteImport.update({
+  id: '/patient/hospitals',
+  path: '/patient/hospitals',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PatientDashboardRoute = PatientDashboardRouteImport.update({
   id: '/patient/dashboard',
   path: '/patient/dashboard',
@@ -111,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/patient/appointments': typeof PatientAppointmentsRoute
   '/patient/book': typeof PatientBookRoute
   '/patient/dashboard': typeof PatientDashboardRoute
+  '/patient/hospitals': typeof PatientHospitalsRoute
   '/patient/profile': typeof PatientProfileRoute
   '/patient/queue': typeof PatientQueueRoute
   '/receptionist/dashboard': typeof ReceptionistDashboardRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByTo {
   '/patient/appointments': typeof PatientAppointmentsRoute
   '/patient/book': typeof PatientBookRoute
   '/patient/dashboard': typeof PatientDashboardRoute
+  '/patient/hospitals': typeof PatientHospitalsRoute
   '/patient/profile': typeof PatientProfileRoute
   '/patient/queue': typeof PatientQueueRoute
   '/receptionist/dashboard': typeof ReceptionistDashboardRoute
@@ -146,6 +154,7 @@ export interface FileRoutesById {
   '/patient/appointments': typeof PatientAppointmentsRoute
   '/patient/book': typeof PatientBookRoute
   '/patient/dashboard': typeof PatientDashboardRoute
+  '/patient/hospitals': typeof PatientHospitalsRoute
   '/patient/profile': typeof PatientProfileRoute
   '/patient/queue': typeof PatientQueueRoute
   '/receptionist/dashboard': typeof ReceptionistDashboardRoute
@@ -165,6 +174,7 @@ export interface FileRouteTypes {
     | '/patient/appointments'
     | '/patient/book'
     | '/patient/dashboard'
+    | '/patient/hospitals'
     | '/patient/profile'
     | '/patient/queue'
     | '/receptionist/dashboard'
@@ -182,6 +192,7 @@ export interface FileRouteTypes {
     | '/patient/appointments'
     | '/patient/book'
     | '/patient/dashboard'
+    | '/patient/hospitals'
     | '/patient/profile'
     | '/patient/queue'
     | '/receptionist/dashboard'
@@ -199,6 +210,7 @@ export interface FileRouteTypes {
     | '/patient/appointments'
     | '/patient/book'
     | '/patient/dashboard'
+    | '/patient/hospitals'
     | '/patient/profile'
     | '/patient/queue'
     | '/receptionist/dashboard'
@@ -217,6 +229,7 @@ export interface RootRouteChildren {
   PatientAppointmentsRoute: typeof PatientAppointmentsRoute
   PatientBookRoute: typeof PatientBookRoute
   PatientDashboardRoute: typeof PatientDashboardRoute
+  PatientHospitalsRoute: typeof PatientHospitalsRoute
   PatientProfileRoute: typeof PatientProfileRoute
   PatientQueueRoute: typeof PatientQueueRoute
   ReceptionistDashboardRoute: typeof ReceptionistDashboardRoute
@@ -283,6 +296,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PatientProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/patient/hospitals': {
+      id: '/patient/hospitals'
+      path: '/patient/hospitals'
+      fullPath: '/patient/hospitals'
+      preLoaderRoute: typeof PatientHospitalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/patient/dashboard': {
       id: '/patient/dashboard'
       path: '/patient/dashboard'
@@ -345,6 +365,7 @@ const rootRouteChildren: RootRouteChildren = {
   PatientAppointmentsRoute: PatientAppointmentsRoute,
   PatientBookRoute: PatientBookRoute,
   PatientDashboardRoute: PatientDashboardRoute,
+  PatientHospitalsRoute: PatientHospitalsRoute,
   PatientProfileRoute: PatientProfileRoute,
   PatientQueueRoute: PatientQueueRoute,
   ReceptionistDashboardRoute: ReceptionistDashboardRoute,
