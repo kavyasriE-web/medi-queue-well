@@ -47,6 +47,18 @@ function AuthPage() {
     enabled: safeRole === "doctor" && tab === "signup",
   });
 
+  const { data: hospitals = [] } = useQuery({
+    queryKey: ["hospitals-signup"],
+    queryFn: async () =>
+      (await supabase.from("hospitals").select("id,name,city").order("name")).data ?? [],
+    enabled: (safeRole === "doctor" || safeRole === "receptionist") && tab === "signup",
+  });
+
+  const [signupHospital, setSignupHospital] = useState<string>("");
+  const doctorDepartments = departments.filter((d: any) =>
+    signupHospital ? d.hospital_id === signupHospital : true,
+  );
+
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
@@ -68,11 +80,17 @@ function AuthPage() {
     const password = String(f.get("password"));
     const full_name = String(f.get("full_name"));
     const phone = String(f.get("phone") ?? "");
+    const hospital_id = String(f.get("hospital_id") ?? "");
+    if ((safeRole === "receptionist" || safeRole === "doctor") && !hospital_id) {
+      toast.error("Please select a hospital");
+      setBusy(false);
+      return;
+    }
     const { data, error } = await supabase.auth.signUp({
       email, password,
       options: {
         emailRedirectTo: `${window.location.origin}/`,
-        data: { full_name, phone, role: safeRole },
+        data: { full_name, phone, role: safeRole, hospital_id: hospital_id || null },
       },
     });
     if (error) { toast.error(error.message); setBusy(false); return; }
@@ -82,7 +100,7 @@ function AuthPage() {
       const specialization = String(f.get("specialization") ?? "");
       setTimeout(async () => {
         await supabase.from("doctors").insert({
-          profile_id: data.user!.id, department_id, specialization,
+          profile_id: data.user!.id, hospital_id, department_id, specialization,
         });
       }, 800);
     }
@@ -132,6 +150,19 @@ function AuthPage() {
                   <div className="space-y-1"><Label>Phone</Label><Input name="phone" /></div>
                   <div className="space-y-1"><Label>Email</Label><Input name="email" type="email" required /></div>
                   <div className="space-y-1"><Label>Password</Label><Input name="password" type="password" required minLength={6} /></div>
+                  {(safeRole === "receptionist" || safeRole === "doctor") && (
+                    <div className="space-y-1">
+                      <Label>Hospital</Label>
+                      <Select name="hospital_id" value={signupHospital} onValueChange={setSignupHospital} required>
+                        <SelectTrigger><SelectValue placeholder="Select your hospital" /></SelectTrigger>
+                        <SelectContent>
+                          {hospitals.map((h: any) => (
+                            <SelectItem key={h.id} value={h.id}>{h.name} — {h.city}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
                   {safeRole === "doctor" && (
                     <>
                       <div className="space-y-1">
@@ -139,7 +170,7 @@ function AuthPage() {
                         <Select name="department_id" required>
                           <SelectTrigger><SelectValue placeholder="Select department" /></SelectTrigger>
                           <SelectContent>
-                            {departments.map((d) => <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>)}
+                            {doctorDepartments.map((d: any) => <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>)}
                           </SelectContent>
                         </Select>
                       </div>

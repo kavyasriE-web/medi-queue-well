@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { RoleGuard } from "@/components/role-guard";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +16,7 @@ import { Loader2, CheckCircle2 } from "lucide-react";
 export const Route = createFileRoute("/receptionist/walkin")({ component: () => <RoleGuard role="receptionist"><Page /></RoleGuard> });
 
 function Page() {
+  const { user } = useAuth();
   const today = new Date().toISOString().slice(0, 10);
   const [departmentId, setDept] = useState("");
   const [doctorId, setDoctor] = useState("");
@@ -26,13 +28,24 @@ function Page() {
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState<any>(null);
 
+  const { data: hospitalId } = useQuery({
+    queryKey: ["my-hospital", user?.id],
+    enabled: !!user?.id,
+    queryFn: async () => {
+      const { data } = await supabase.from("user_roles")
+        .select("hospital_id").eq("user_id", user!.id).eq("role", "receptionist").maybeSingle();
+      return data?.hospital_id as string | null;
+    },
+  });
   const { data: departments = [] } = useQuery({
-    queryKey: ["depts-walkin"],
-    queryFn: async () => (await supabase.from("departments").select("*").order("name")).data ?? [],
+    queryKey: ["depts-walkin", hospitalId],
+    enabled: !!hospitalId,
+    queryFn: async () => (await supabase.from("departments").select("*").eq("hospital_id", hospitalId!).order("name")).data ?? [],
   });
   const { data: doctors = [] } = useQuery<any[]>({
-    queryKey: ["docs-walkin", departmentId], enabled: !!departmentId,
-    queryFn: async () => (await supabase.from("doctors").select("*, profiles:profile_id(full_name)").eq("department_id", departmentId)).data ?? [],
+    queryKey: ["docs-walkin", hospitalId, departmentId], enabled: !!departmentId && !!hospitalId,
+    queryFn: async () => (await supabase.from("doctors").select("*, profiles:profile_id(full_name)")
+      .eq("hospital_id", hospitalId!).eq("department_id", departmentId)).data ?? [],
   });
 
   const submit = async (e: React.FormEvent) => {
@@ -46,7 +59,7 @@ function Page() {
     if (!receptionistId) { setBusy(false); return; }
     const composedSymptoms = `[Walk-in: ${name} · ${phone}${email ? " · " + email : ""}]\n${symptoms}`;
     const { data, error } = await supabase.from("appointments").insert({
-      patient_id: receptionistId, doctor_id: doctorId, department_id: departmentId,
+      patient_id: receptionistId, hospital_id: hospitalId!, doctor_id: doctorId, department_id: departmentId,
       appointment_date: today, slot_time: slot || "09:00:00", symptoms: composedSymptoms,
       is_walk_in: true, token_number: 0, token_code: "",
     } as any).select("*, departments(name, code)").single();

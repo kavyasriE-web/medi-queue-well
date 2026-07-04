@@ -87,7 +87,7 @@ function Home() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90">
-              <Link to="/patient/book"><Calendar className="mr-2 h-4 w-4" /> Book Appointment</Link>
+              <Link to="/patient/hospitals"><Calendar className="mr-2 h-4 w-4" /> Find Hospital & Book</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="border-black/30 bg-white/60 text-black hover:bg-white/80">
               <Link to="/queue"><Users className="mr-2 h-4 w-4" /> View Live Queue</Link>
