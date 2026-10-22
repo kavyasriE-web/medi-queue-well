@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Hospital, MapPin, Navigation, Search, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,7 @@ type Hospital = {
 type GeoState =
   | { status: "idle" }
   | { status: "loading" }
-  | { status: "granted"; lat: number; lng: number }
+  | { status: "granted"; lat: number; lng: number; accuracy: number | null }
   | { status: "denied"; message: string };
 
 function haversineKm(a: { lat: number; lng: number }, b: { lat: number; lng: number }) {
@@ -53,22 +53,36 @@ function HospitalsPage() {
       ((await supabase.from("hospitals").select("*").order("name")).data ?? []) as Hospital[],
   });
 
-  const requestLocation = () => {
+  const watchRef = useRef<number | null>(null);
+
+  // Realtime GPS: keeps tracking the patient's position so the
+  // "near me" ordering updates live as they move.
+  const startTracking = () => {
     if (!("geolocation" in navigator)) {
       setGeo({ status: "denied", message: "Location not supported in this browser." });
       return;
     }
     setGeo({ status: "loading" });
-    navigator.geolocation.getCurrentPosition(
-      (pos) => setGeo({ status: "granted", lat: pos.coords.latitude, lng: pos.coords.longitude }),
+    if (watchRef.current != null) navigator.geolocation.clearWatch(watchRef.current);
+    watchRef.current = navigator.geolocation.watchPosition(
+      (pos) =>
+        setGeo({
+          status: "granted",
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+          accuracy: pos.coords.accuracy ?? null,
+        }),
       (err) => setGeo({ status: "denied", message: err.message || "Permission denied." }),
-      { enableHighAccuracy: false, timeout: 8000, maximumAge: 300_000 },
+      { enableHighAccuracy: true, timeout: 12000, maximumAge: 5000 },
     );
   };
 
-  // Auto-prompt on first mount
+  // Auto-start live GPS tracking on first mount
   useEffect(() => {
-    if (geo.status === "idle") requestLocation();
+    startTracking();
+    return () => {
+      if (watchRef.current != null) navigator.geolocation.clearWatch(watchRef.current);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -128,12 +142,14 @@ function HospitalsPage() {
         <Card>
           <CardContent className="p-4 space-y-3">
             <div className="flex flex-wrap items-center gap-3">
-              <Button onClick={requestLocation} size="sm" variant={geo.status === "granted" ? "outline" : "default"}>
+              <Button onClick={startTracking} size="sm" variant={geo.status === "granted" ? "outline" : "default"}>
                 {geo.status === "loading" ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Navigation className="mr-2 h-4 w-4" />}
-                {geo.status === "granted" ? "Location on" : "Use my location"}
+                {geo.status === "granted" ? "Live location on" : "Use my location"}
               </Button>
               {geo.status === "granted" && (
-                <Badge variant="secondary">Sorted by distance</Badge>
+                <Badge variant="secondary">
+                  Sorted by distance{geo.accuracy != null ? ` · ±${Math.round(geo.accuracy)} m` : ""}
+                </Badge>
               )}
               {geo.status === "denied" && (
                 <span className="text-sm text-muted-foreground">Location off — search below.</span>
