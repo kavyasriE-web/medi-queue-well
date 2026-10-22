@@ -15,7 +15,7 @@ import { createMyHospital } from "@/lib/hospitals-admin.functions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/auth/$role")({
-  validateSearch: (s: Record<string, unknown>) => ({ tab: (s.tab as string) === "signup" ? "signup" : "login" }),
+  validateSearch: (s: Record<string, unknown>) => ({ tab: (s.tab as string) === "signup" ? ("signup" as const) : undefined }),
   component: AuthPage,
 });
 
