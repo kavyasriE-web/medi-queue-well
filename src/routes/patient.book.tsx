@@ -15,9 +15,9 @@ import { generateSlots, dayOfWeekIso } from "@/lib/slots";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/patient/book")({
-  validateSearch: (s: Record<string, unknown>) => ({
-    hospital: typeof s.hospital === "string" ? s.hospital : undefined,
-  }),
+  validateSearch: (s: Record<string, unknown>) =>
+    ({ hospital: typeof s.hospital === "string" ? s.hospital : undefined }) as
+      { hospital?: string },
   component: () => <RoleGuard role="patient"><Page /></RoleGuard>,
 });
 

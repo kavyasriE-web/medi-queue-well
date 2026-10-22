@@ -86,3 +86,58 @@ export const deleteHospital = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+// Lets a freshly signed-up receptionist create their own hospital and links it
+// to their role row, so they can onboard without an existing hospital.
+export const createMyHospital = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => hospitalSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    // Verify the caller is a receptionist via their RLS-visible role row.
+    const { data: roleRow, error: roleErr } = await context.supabase
+      .from("user_roles")
+      .select("id, hospital_id")
+      .eq("user_id", context.userId)
+      .eq("role", "receptionist")
+      .maybeSingle();
+    if (roleErr) throw new Error(roleErr.message);
+    if (!roleRow) throw new Error("Forbidden: receptionist role required");
+    if (roleRow.hospital_id) throw new Error("You are already assigned to a hospital");
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const code = data.code.toUpperCase();
+    const { data: clash } = await supabaseAdmin
+      .from("hospitals")
+      .select("id")
+      .eq("code", code)
+      .maybeSingle();
+    if (clash) throw new Error("A hospital with this code already exists");
+
+    const { data: row, error: insErr } = await supabaseAdmin
+      .from("hospitals")
+      .insert({
+        name: data.name,
+        code,
+        city: data.city,
+        area: data.area || null,
+        address: data.address || null,
+        phone: data.phone || null,
+        latitude: data.latitude ?? null,
+        longitude: data.longitude ?? null,
+        description: data.description || null,
+      })
+      .select()
+      .single();
+    if (insErr) throw new Error(insErr.message);
+
+    const { error: linkErr } = await supabaseAdmin
+      .from("user_roles")
+      .update({ hospital_id: row.id })
+      .eq("id", roleRow.id);
+    if (linkErr) {
+      await supabaseAdmin.from("hospitals").delete().eq("id", row.id);
+      throw new Error(linkErr.message);
+    }
+    return row;
+  });
