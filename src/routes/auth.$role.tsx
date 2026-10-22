@@ -205,7 +205,16 @@ function AuthPage() {
                   <div className="space-y-1"><Label>Phone</Label><Input name="phone" /></div>
                   <div className="space-y-1"><Label>Email</Label><Input name="email" type="email" required /></div>
                   <div className="space-y-1"><Label>Password</Label><Input name="password" type="password" required minLength={6} /></div>
-                  {(safeRole === "receptionist" || safeRole === "doctor") && (
+                  {safeRole === "receptionist" && (
+                    <div className="space-y-1">
+                      <Label>Hospital</Label>
+                      <div className="grid grid-cols-2 gap-2">
+                        <Button type="button" variant={hospitalMode === "existing" ? "default" : "outline"} onClick={() => setHospitalMode("existing")}>Choose existing</Button>
+                        <Button type="button" variant={hospitalMode === "new" ? "default" : "outline"} onClick={() => setHospitalMode("new")}>Create new</Button>
+                      </div>
+                    </div>
+                  )}
+                  {(safeRole === "doctor" || (safeRole === "receptionist" && hospitalMode === "existing")) && (
                     <div className="space-y-1">
                       <Label>Hospital</Label>
                       <Select name="hospital_id" value={signupHospital} onValueChange={setSignupHospital} required>
@@ -217,6 +226,24 @@ function AuthPage() {
                         </SelectContent>
                       </Select>
                     </div>
+                  )}
+                  {safeRole === "receptionist" && hospitalMode === "new" && (
+                    <>
+                      <div className="space-y-1"><Label>New hospital name</Label><Input name="new_name" required /></div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="space-y-1"><Label>Code (2–8)</Label><Input name="new_code" required maxLength={8} /></div>
+                        <div className="space-y-1"><Label>City</Label><Input name="new_city" required /></div>
+                      </div>
+                      <div className="space-y-1"><Label>Area / locality</Label><Input name="new_area" /></div>
+                      <div className="space-y-1"><Label>Address</Label><Input name="new_address" /></div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="space-y-1"><Label>Latitude</Label><Input name="new_lat" value={newLat} onChange={(e) => setNewLat(e.target.value)} /></div>
+                        <div className="space-y-1"><Label>Longitude</Label><Input name="new_lng" value={newLng} onChange={(e) => setNewLng(e.target.value)} /></div>
+                      </div>
+                      <Button type="button" variant="outline" size="sm" onClick={fillGps}>
+                        <Navigation className="mr-2 h-4 w-4" /> Use my current location
+                      </Button>
+                    </>
                   )}
                   {safeRole === "doctor" && (
                     <>
