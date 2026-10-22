@@ -1,7 +1,8 @@
 import { createFileRoute, Link, useNavigate, useParams } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Hospital, Stethoscope, User as UserIcon, UserPlus, Loader2 } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { Hospital, Stethoscope, User as UserIcon, UserPlus, Loader2, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, rolePath, type Role } from "@/lib/auth";
+import { createMyHospital } from "@/lib/hospitals-admin.functions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/auth/$role")({
@@ -31,15 +33,33 @@ function AuthPage() {
   const { user, role: userRole, loading, refreshRole } = useAuth();
   const [tab, setTab] = useState<"login" | "signup">(search.tab);
   const [busy, setBusy] = useState(false);
+  const createMyHospitalFn = useServerFn(createMyHospital);
+  const [hospitalMode, setHospitalMode] = useState<"existing" | "new">("existing");
+  const [newLat, setNewLat] = useState("");
+  const [newLng, setNewLng] = useState("");
+  const [pendingSetup, setPendingSetup] = useState(false);
 
   const safeRole = (VALID_ROLES.includes(role as Role) ? role : "patient") as Role;
   const Meta = roleMeta[safeRole];
 
   useEffect(() => {
-    if (!loading && user && userRole) {
+    if (!loading && user && userRole && !pendingSetup) {
       navigate({ to: rolePath[userRole] });
     }
-  }, [user, userRole, loading, navigate]);
+  }, [user, userRole, loading, pendingSetup, navigate]);
+
+  const fillGps = () => {
+    if (!("geolocation" in navigator)) { toast.error("Location not supported in this browser."); return; }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setNewLat(pos.coords.latitude.toFixed(6));
+        setNewLng(pos.coords.longitude.toFixed(6));
+        toast.success("Location captured for the new hospital");
+      },
+      (err) => toast.error(err.message || "Could not get your location"),
+      { enableHighAccuracy: true, timeout: 10000 },
+    );
+  };
 
   const { data: departments = [] } = useQuery({
     queryKey: ["departments-list"],
@@ -81,11 +101,18 @@ function AuthPage() {
     const full_name = String(f.get("full_name"));
     const phone = String(f.get("phone") ?? "");
     const hospital_id = String(f.get("hospital_id") ?? "");
-    if ((safeRole === "receptionist" || safeRole === "doctor") && !hospital_id) {
+    const useNewHospital = safeRole === "receptionist" && hospitalMode === "new";
+    if ((safeRole === "receptionist" || safeRole === "doctor") && !useNewHospital && !hospital_id) {
       toast.error("Please select a hospital");
       setBusy(false);
       return;
     }
+    if (useNewHospital && (!String(f.get("new_name") ?? "") || !String(f.get("new_code") ?? "") || !String(f.get("new_city") ?? ""))) {
+      toast.error("Please fill in the new hospital details");
+      setBusy(false);
+      return;
+    }
+    if (useNewHospital) setPendingSetup(true);
     const { data, error } = await supabase.auth.signUp({
       email, password,
       options: {
@@ -93,7 +120,35 @@ function AuthPage() {
         data: { full_name, phone, role: safeRole, hospital_id: hospital_id || null },
       },
     });
-    if (error) { toast.error(error.message); setBusy(false); return; }
+    if (error) { toast.error(error.message); setPendingSetup(false); setBusy(false); return; }
+
+    if (useNewHospital && data.user) {
+      try {
+        await createMyHospitalFn({ data: {
+          name: String(f.get("new_name")),
+          code: String(f.get("new_code")),
+          city: String(f.get("new_city")),
+          area: String(f.get("new_area") ?? ""),
+          address: String(f.get("new_address") ?? ""),
+          phone,
+          latitude: newLat ? Number(newLat) : null,
+          longitude: newLng ? Number(newLng) : null,
+          description: "",
+        }});
+        toast.success("Hospital created and linked to your account!");
+        await refreshRole();
+        setPendingSetup(false);
+        setBusy(false);
+        navigate({ to: rolePath.receptionist });
+        return;
+      } catch (err: any) {
+        toast.error(err?.message ?? "Hospital setup failed — add it from the Hospitals page.");
+        setPendingSetup(false);
+        setBusy(false);
+        navigate({ to: "/receptionist/hospitals" });
+        return;
+      }
+    }
 
     if (safeRole === "doctor" && data.user) {
       const department_id = String(f.get("department_id"));
